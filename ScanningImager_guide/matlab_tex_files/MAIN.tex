@@ -20,13 +20,10 @@ clc
 clear all
 close all
 
-%% USER INPUTS
-n_rows = 10;
-n_cols = 10;
+%% Prompt user input
+[idealx,idealy] = inputPointsOfInterest;
 
-registration_points = [1, 1;...
-                       1, 10;...
-                       10, 10];
+idealPoints = inputRegPoints;
 
 feedrate = 1000;
 
@@ -79,13 +76,10 @@ disp('Homed!')
 fprintf(ser,'G10P1L20X0Y0Z0\n');
 getResponse(ser);
 
-%%
+%% Jog for registration points
 
 % Using GUI applet to jog and capture registration points
 % Passing in video and serial port
-disp(['Expecting points: (', num2str(registration_points(1,:)),'), (',...
-    num2str(registration_points(2,:)),'), (',...
-    num2str(registration_points(3,:)),')'])
 realPoints = jogapplet(vid,ser);
 
 % Return to absolute programming
@@ -95,16 +89,15 @@ fprintf(ser,'G90\n');
 set(vid.Source,'DecimationHorizontal',1)
 set(vid.Source,'DecimationVertical',1)
 
+% Generate spot map and transform using registration points
+tform_matrix = fitgeotrans(idealPoints,realPoints,'affine');
+[machinex,machiney] = transformPointsForward(tform_matrix,idealx,idealy);
+
+
 %% Beginning loop
 check4Alarm(ser)
 
-% Generate spot map and transform using registration points
-idealPoints = registration_points;
-tform_matrix = fitgeotrans(idealPoints,realPoints,'affine');
-[idealx,idealy] = meshgrid([1:n_cols],[1:n_rows]);
-[machinex,machiney] = transformPointsForward(tform_matrix,idealx,idealy);
-
-%% Looping through all coordinates
+% Looping through all coordinates
 for i=1:numel(idealx)
     xloc = machinex(i);
     yloc = machiney(i);
@@ -147,8 +140,8 @@ for i=1:numel(idealx)
     end
     
     % Take image
-    imgname = [num2str(idealx(i)),'_',num2str(idealy(i)),'-img',...
-        num2str(i),'.png'];
+    imgname = [num2str(idealx(i),'%02d'),'_',num2str(idealy(i),'%02d'),...
+        '-img',num2str(i,'%04d'),'.png'];
     start(vid)
     % Wait up to 30 seconds for successful capture
     startwatch = now;
