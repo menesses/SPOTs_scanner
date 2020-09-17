@@ -1,0 +1,10 @@
+function submitpoints
+% For use in jog applet
+% Signals that all registration points are satisfactory as determined by the
+% user, then closes applet and video preview
+    global pointsgood
+    pointsgood = true;
+    pause(0.5)
+%     closepreview;
+%     closereq;
+end
