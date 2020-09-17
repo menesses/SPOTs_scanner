@@ -3,6 +3,7 @@ author:
 - Mark Menesses
 date: 15 September 2020
 title: Scanning Imager Guide
+note: This guide converted from LaTeX automatically with Pandoc.
 ---
 
 Overview
