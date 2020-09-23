@@ -2,7 +2,7 @@ function [WCo,MPos,position] = getWCoMPos(serial_port)
 % Returns Working Coordinate (WCo), Machine Position (MPos), and position.
 % WCo is returned by controller only every ~1s or so. We thus loop here
 % until we have received it. WCo is NOT the actual coordinates to be input
-% into GCode commands.
+% into GCode commands. Instead, use 'position'.
     got_it = false;
     while ~got_it
         fprintf(serial_port,'?\n');
@@ -10,10 +10,15 @@ function [WCo,MPos,position] = getWCoMPos(serial_port)
         response = getResponse(serial_port);
 		% Parse through response looking for WCO and MPos.
         if contains(response,"WCO")
+            disp('#########################')
+            disp(response)
+            disp('#########################')
             response = strsplit(response,'<');
             response = response(end);
             response = strsplit(response(contains(response,'>')),'>');
             out = strsplit(response(1),'|');
+            disp(out)
+            disp('#########################')
             coord = strsplit(out(contains(out,"WCO")),':');
             WCo = str2double(strsplit(coord(2),','));
             pos = strsplit(out(contains(out,"MPos")),':');
