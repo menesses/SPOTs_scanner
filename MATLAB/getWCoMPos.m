@@ -10,15 +10,10 @@ function [WCo,MPos,position] = getWCoMPos(serial_port)
         response = getResponse(serial_port);
 		% Parse through response looking for WCO and MPos.
         if contains(response,"WCO")
-            disp('#########################')
-            disp(response)
-            disp('#########################')
             response = strsplit(response,'<');
-            response = response(end);
+            response = response(contains(response,"WCO"));
             response = strsplit(response(contains(response,'>')),'>');
             out = strsplit(response(1),'|');
-            disp(out)
-            disp('#########################')
             coord = strsplit(out(contains(out,"WCO")),':');
             WCo = str2double(strsplit(coord(2),','));
             pos = strsplit(out(contains(out,"MPos")),':');

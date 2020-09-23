@@ -5,6 +5,6 @@ function response = getResponse(serial_port)
         while serial_port.BytesAvailable > 0
             response = response + fscanf(serial_port);
         end
-        disp(response)
+        %disp(response)
     end
 end
