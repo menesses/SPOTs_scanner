@@ -1,5 +1,6 @@
 function [x_list,y_list]=areaScanPreview(axes,area_height,area_width,sensor_height,...
-    sensor_width,f_tube,f_obj,mag_obj,overlap)
+    sensor_width,f_tube,f_obj,mag_obj,overlap,nrows_field,ncols_field,...
+    nimages_field)
 
 overlap=overlap/100;
 
@@ -49,5 +50,9 @@ for i=1:numel(x_list)
         'FaceColor',fillcolors(mod(i,length(fillcolors))+1,:),...
         'LineStyle','-.');
 end
+
+nrows_field.Value = n_rows;
+ncols_field.Value = n_cols;
+nimages_field.Value = n_rows * n_cols;
 
 end
