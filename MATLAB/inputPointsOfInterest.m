@@ -1,6 +1,6 @@
 function [X_locs, Y_locs] = inputPointsOfInterest
 % Prompt user for points of interest
-answer = questdlg('Select CSV with points of interest or define row/column dimensions?','Input selection','CSV','Row/Column dimensions','Row/Column dimensions');
+answer = questdlg('Choose input for points of interest.','Input selection','CSV','Row/Column dimensions','Area Scan Helper (Beta)','Row/Column dimensions');
 switch answer
     case 'CSV'
         questdlg('CSV file should contain have X and Y columns of N rows','OK','OK','OK')
@@ -19,6 +19,7 @@ switch answer
         n_rows = str2double(rows_cols{1});
         n_cols = str2double(rows_cols{2});
         [X_locs,Y_locs] = meshgrid([1:n_cols],[1:n_rows]);
+    case 'Area Scan Helper (Beta)'
+        [X_locs,Y_locs,overlap] = areaScanSetup;
 end
 end
-
