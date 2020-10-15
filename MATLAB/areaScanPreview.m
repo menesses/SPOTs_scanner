@@ -21,9 +21,8 @@ ys = linspace(y_0,y_end,n_rows);
 
 [x_list,y_list] = meshgrid(xs,ys);
 
-for i=1:numel(axes.Children)
-    delete(axes.Children(1))
-end
+delete(axes.Children)
+
 area_position = [150-area_width/2, 150-area_height/2,...
     area_width, area_height];
 rectangle(axes,'Position',area_position)
